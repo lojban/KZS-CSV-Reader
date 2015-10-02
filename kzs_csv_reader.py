@@ -38,7 +38,7 @@ else:
     path = sys.argv[1]
     kzs_total = int(sys.argv[2])
     THRESHOLD = 10
-    print "Path = " + path + "\nKsZ total = " + str(kzs_total)
+    print "Path = " + path + "\nKZS total = " + str(kzs_total)
     with open(path, "rb") as f:
         reader = csv.reader(f, delimiter=';')
         rownum = 0
