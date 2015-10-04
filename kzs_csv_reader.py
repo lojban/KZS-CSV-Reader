@@ -84,10 +84,11 @@ else:
         s = s2
     s = sorted(s, reverse= False)
     s = sorted(s, key= lambda x: x[1], reverse= True)
+    num_col_rjust = len(str(s[0][1]))
     for e in s:
         if e[1] < THRESHOLD:
             break
-        print e[0].ljust(8) + " " + str(e[1]).rjust(6)
-    print "Total:   " + str(len(s)).rjust(6)
+        print e[0].ljust(8) + " " + str(e[1]).rjust(num_col_rjust)
+    print "Total:   " + str(len(s)).rjust(num_col_rjust)
     print "mu'o"
 
