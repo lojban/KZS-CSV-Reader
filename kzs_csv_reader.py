@@ -37,6 +37,7 @@ else:
     s = []
     path = sys.argv[1]
     kzs_total = int(sys.argv[2])
+    kzs_multiplier = kzs_total / 1000000.0
     THRESHOLD = 10
     print "Path = " + path + "\nKZS total = " + str(kzs_total)
     with open(path, "rb") as f:
@@ -45,7 +46,7 @@ else:
         for row in reader:
             if rownum > 1:
                 # print str(rownum) + ": " + row[0] + " | " + str(row[1])
-                n = int(round(float(row[1]) * (kzs_total / 1000000), 0))
+                n = int(round(float(row[1]) * kzs_multiplier, 0))
                 if n >= THRESHOLD:
                     s.append([row[0], n])
             rownum += 1
