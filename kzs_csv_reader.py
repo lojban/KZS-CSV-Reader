@@ -30,6 +30,16 @@ $ python kzs_csv_reader.py yT9dn69X.csv 5397953 official_cmavo.txt
 
 import sys, csv
 
+def prop_index(list, prop):
+    l = len(list)
+    i = 0
+    while i < l:
+        if prop(list[i]):
+            return i
+        i += 1
+    return None
+        
+
 if len(sys.argv) < 3:
     print "Not enough parameters."
     quit()
@@ -42,14 +52,22 @@ else:
     print "Path = " + path + "\nKZS total = " + str(kzs_total)
     with open(path, "rb") as f:
         reader = csv.reader(f, delimiter=';')
-        rownum = 0
+        cnt = 2
         for row in reader:
-            if rownum > 1:
-                # print str(rownum) + ": " + row[0] + " | " + str(row[1])
+            if cnt > 0:
+                cnt -= 1
+                continue
+            else:
+                w = row[0]
                 n = int(round(float(row[1]) * kzs_multiplier, 0))
-                if n >= THRESHOLD:
-                    s.append([row[0], n])
-            rownum += 1
+                if w[0] in ('a', 'e', 'i', 'o', 'u', 'y'):
+                    w = '.' + w
+                if w[0] == '.':
+                    i = prop_index(s, lambda x: x[0] == w)
+                    if i is not None:
+                        s[i][1] += n
+                        continue
+                s.append([w, n])
     if len(sys.argv) >= 4:
         mask_file_path = sys.argv[3]
         print "Filter file path = " + str(mask_file_path)
@@ -68,7 +86,9 @@ else:
     s = sorted(s, reverse= False)
     s = sorted(s, key= lambda x: x[1], reverse= True)
     for e in s:
-        print e[0].ljust(8) + " " + str(e[1]).rjust(4)
-    print "Total:   " + str(len(s)).rjust(4)
+        if e[1] < THRESHOLD:
+            break
+        print e[0].ljust(8) + " " + str(e[1]).rjust(6)
+    print "Total:   " + str(len(s)).rjust(6)
     print "mu'o"
 
